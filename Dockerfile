@@ -1,7 +1,7 @@
 # Postgresql (http://www.postgresql.org/)
 
 FROM phusion/baseimage:0.9.13
-MAINTAINER Ryan Seto <ryanseto@yak.net>
+MAINTAINER Florian Sesser <florian@sesser.at>
 
 # Ensure we create the cluster with UTF-8 locale
 RUN locale-gen en_US.UTF-8 && \
@@ -25,12 +25,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Cofigure the database to use our data dir.
-RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data'/" /etc/postgresql/9.3/main/postgresql.conf
+RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data/postgresql'/" /etc/postgresql/9.3/main/postgresql.conf
 # Allow connections from anywhere.
-RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/9.3/main/postgresql.conf
-RUN echo "host    all    all    0.0.0.0/0    md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+#RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/9.3/main/postgresql.conf
+#RUN echo "host    all    all    0.0.0.0/0    md5" >> /etc/postgresql/9.3/main/pg_hba.conf
 
-EXPOSE 5432
+#EXPOSE 5432
 ADD scripts /scripts
 RUN chmod +x /scripts/start.sh
 RUN touch /firstrun
@@ -40,7 +40,7 @@ RUN mkdir /etc/service/postgresql
 RUN ln -s /scripts/start.sh /etc/service/postgresql/run
 
 # Expose our data, log, and configuration directories.
-VOLUME ["/data", "/var/log/postgresql", "/etc/postgresql"]
+VOLUME ["/data"]
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
