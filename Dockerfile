@@ -1,4 +1,4 @@
-# Postgresql (http://www.postgresql.org/)
+# LNPP: Linux, NGINX, PostgreSQL, PHP.
 
 FROM phusion/baseimage:0.9.13
 MAINTAINER Florian Sesser <florian@sesser.at>
@@ -26,11 +26,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Cofigure the database to use our data dir.
 RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data/postgresql'/" /etc/postgresql/9.3/main/postgresql.conf
-# Allow connections from anywhere.
-#RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/9.3/main/postgresql.conf
-#RUN echo "host    all    all    0.0.0.0/0    md5" >> /etc/postgresql/9.3/main/pg_hba.conf
 
-#EXPOSE 5432
 ADD scripts /scripts
 RUN chmod +x /scripts/start.sh
 RUN touch /firstrun
