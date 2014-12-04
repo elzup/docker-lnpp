@@ -25,7 +25,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Cofigure the database to use our data dir.
-RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data/postgresql'/" /etc/postgresql/9.3/main/postgresql.conf
+RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data\/postgresql'/" /etc/postgresql/9.3/main/postgresql.conf
 
 ADD scripts /scripts
 RUN chmod +x /scripts/start.sh
