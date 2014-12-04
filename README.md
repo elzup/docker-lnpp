@@ -6,12 +6,10 @@ Development happens on branch `develop`.
 The `master` will hold stable releases once I'd say I have something like that.
 
 A Dockerfile for my idea of a LAMP stack (actually LNPP):
-
 - [NGINX][nginx],
 - [PostgreSQL][postgresql],
 - [php5-fpm][php5-fpm]
-
-all run by [daemontools][daemontools] (or here, [runit][runit]).
+- all run by [daemontools][daemontools] (or here, [runit][runit]).
 
 
 
