@@ -1,47 +1,55 @@
-# docker-postgresql
+# docker-lnpp
 
-A Dockerfile that produces a container that will run [PostgreSQL][postgresql].
+**THIS IS IN DEVELOPMENT** and probably not ready yet.
+
+Development happens on branch `develop`.
+The `master` will hold stable releases once I'd say I have something like that.
+
+A Dockerfile for my idea of a LAMP stack (actually LNPP):
+
+- [NGINX][nginx],
+- [PostgreSQL][postgresql],
+- [php5-fpm][php5-fpm]
+
+all run by [daemontools][daemontools] (or here, [runit][runit]).
+
+
+
+
+Big up to [Hongli Lai](https://github.com/FooBarWidget) at [Phusion](http://www.phusion.nl/) for [baseimage-docker](https://github.com/phusion/baseimage-docker), to [Ryan Seto](https://github.com/Painted-Fox) for adding Postgres and to [Ross Riley](https://github.com/rossriley) for his [docker-nginx-pg-php](https://github.com/rossriley/docker-nginx-pg-php) which I took some good advice from.
 
 [postgresql]: http://www.postgresql.org/
+[NGINX]: http://nginx.org/
+[php5-fpm]: http://php-fpm.org/
+[runit]: http://smarden.org/runit/
+[daemontools]: http://cr.yp.to/daemontools.html
 
 ## Image Creation
 
-This example creates the image with the tag `paintedfox/postgresql`, but you can
-change this to use your own username.
+This example creates the image with the tag `hacklschorsch/lnpp`, but you can change this to use your own username.
 
 ```
-$ docker build -t="paintedfox/postgresql" .
+$ docker build -t="hacklschorsch/lnpp" .
 ```
 
-Alternately, you can run the following if you have *make* installed...
-
-```
-$ make
-```
+Alternately, you can just run `make` if you have GNU make installed.
 
 You can also specify a custom docker username like so:
 
 ```
-$ make DOCKER_USER=paintedfox
+$ make DOCKER_USER=hacklschorsch
 ```
 
 ## Container Creation / Running
 
-The PostgreSQL server is configured to store data in `/data` inside the
-container.  You can map the container's `/data` volume to a volume on the host
-so the data becomes independant of the running container. There is also an 
-additional volume at `/var/log/postgresql` which exposes PostgreSQL's logs.
+The PostgreSQL server is configured to store data in `/data/postgres` inside the container.
+You can map the container's `/data` volume to a volume on the host so the data becomes independant of the running container.
 
-This example uses `/tmp/postgresql` to store the PostgreSQL data, but you can
-modify this to your needs.
+When the container runs, it creates a superuser with a random password.
+You can set the username and password for the superuser by setting the container's environment variables.
+This lets you discover the username and password of the superuser from within a linked container or from the output of `docker inspect postgresql`.
 
-When the container runs, it creates a superuser with a random password.  You
-can set the username and password for the superuser by setting the container's
-environment variables.  This lets you discover the username and password of the
-superuser from within a linked container or from the output of `docker inspect
-postgresql`.
-
-If you set DB=database_name, when the container runs it will create a new
+If you set `DB=database_name`, when the container runs it will create a new
 database with the USER having full ownership of it.
 
 ``` shell
@@ -52,13 +60,7 @@ $ docker run -d --name="postgresql" \
              -e USER="super" \
              -e DB="database_name" \
              -e PASS="$(pwgen -s -1 16)" \
-             paintedfox/postgresql
-```
-
-Alternately, you can run the following if you have *make* installed...
-
-``` shell
-$ make run
+             hacklschorsch/lnpp
 ```
 
 You can also specify a custom port to bind to on the host, a custom data
@@ -110,34 +112,3 @@ $ psql -h 127.0.0.1 -U super template1
 
 Then enter the password from the `docker logs` command when prompted.
 
-## Linking with the Database Container
-
-You can link a container to the database container.  You may want to do this to
-keep web application processes that need to connect to the database in
-a separate container.
-
-To demonstrate this, we can spin up a new container like so:
-
-``` shell
-$ docker run -t -i --link postgresql:db ubuntu bash
-```
-
-This assumes you're already running the database container with the name
-*postgresql*.  The `--link postgresql:db` will give the linked container the
-alias *db* inside of the new container.
-
-From the new container you can connect to the database by running the following
-commands:
-
-``` shell
-$ apt-get install -y postgresql-client
-$ psql -U "$DB_ENV_USER" \
-       -h "$DB_PORT_5432_TCP_ADDR" \
-       -p "$DB_PORT_5432_TCP_PORT"
-```
-
-If you ran the *postgresql* container with the flags `-e USER=<user>` and `-e
-PASS=<pass>`, then the linked container should have these variables available
-in its environment.  Since we aliased the database container with the name
-*db*, the environment variables from the database container are copied into the
-linked container with the prefix `DB_ENV_`.
