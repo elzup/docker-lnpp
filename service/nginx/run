@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo Starting NGINX
+exec 2>&1
+exec /usr/sbin/nginx
+
