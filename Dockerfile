@@ -24,8 +24,10 @@ RUN apt-get update
 VOLUME ["/data/postgresql"]
 
 # Install the latest postgresql
-RUN apt-get -y install postgresql-9.3
-RUN apt-get -y install postgresql-contrib-9.3
+RUN apt-get -y install postgresql-9.3 \
+                       postgresql-contrib-9.3 \
+                       pwgen \
+                       inotify-tools
 
 # Install other tools.
 # RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
