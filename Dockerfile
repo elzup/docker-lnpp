@@ -28,11 +28,7 @@ RUN apt-get update
 
 ## Postgres
 
-# Install the latest postgresql
 RUN apt-get -y install postgresql-9.3 postgresql-contrib-9.3 pwgen inotify-tools
-
-# Install other tools.
-# RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
 
 # Cofigure the database to use our data dir.
 RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data\/postgresql'/" /etc/postgresql/9.3/main/postgresql.conf
@@ -54,11 +50,15 @@ RUN chown -R postgres:postgres /data/postgresql
 
 RUN apt-get install -y nginx
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+# RUN mkdir -p /data/nginx_docroot
+ADD config/nginx.conf /etc/nginx/sites-available/default
 
-# Install PHP5 and modules
+
+
+## PHP5
+
 RUN apt-get install -y php5-fpm php5-pgsql php-apc php5-mcrypt php5-curl php5-gd php5-json php5-cli
 
-# Configure PHP
 # RUN sed -i -e "s/short_open_tag = Off/short_open_tag = On/g" /etc/php5/fpm/php.ini
 RUN sed -i -e "s/post_max_size = 8M/post_max_size = 20M/g" /etc/php5/fpm/php.ini
 RUN sed -i -e "s/upload_max_filesize = 2M/upload_max_filesize = 20M/g" /etc/php5/fpm/php.ini
@@ -73,6 +73,7 @@ RUN echo "date.timezone = Europe/Berlin;" >> etc/php5/fpm/php.ini
 
 ADD service /etc/service
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+VOLUME ["/var/log/"]
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]

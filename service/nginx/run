@@ -1,6 +1,9 @@
 #!/bin/bash
 
 echo Starting NGINX
+
+/usr/bin/install -d /data/nginx_docroot
+
 exec 2>&1
 exec /usr/sbin/nginx
 
