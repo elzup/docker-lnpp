@@ -11,7 +11,7 @@ A Dockerfile for my idea of a LAMP stack (actually LNPP):
 - [php5-fpm][php5-fpm]
 - all run by [daemontools][daemontools] (or here, [runit][runit]).
 
-Big up to [Hongli Lai](https://github.com/FooBarWidget) at [Phusion](http://www.phusion.nl/) for [baseimage-docker](https://github.com/phusion/baseimage-docker), to [Ryan Seto](https://github.com/Painted-Fox) for adding Postgres and to [Ross Riley](https://github.com/rossriley) for his [docker-nginx-pg-php](https://github.com/rossriley/docker-nginx-pg-php) which I took some good advice from.
+Big up to [Hongli Lai](https://github.com/FooBarWidget) at [Phusion](http://www.phusion.nl/) for [baseimage-docker](https://github.com/phusion/baseimage-docker), to [Ryan Seto](https://github.com/Painted-Fox) for [adding Postgres](https://github.com/Painted-Fox/docker-postgresql) and to [Ross Riley](https://github.com/rossriley) for his [docker-nginx-pg-php](https://github.com/rossriley/docker-nginx-pg-php) which I took some good advice from.
 
 [postgresql]: http://www.postgresql.org/
 [NGINX]: http://nginx.org/
