@@ -13,6 +13,8 @@ RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 ## Postgres
 
+VOLUME ["/data/postgresql"]
+
 # Ensure we create the cluster with UTF-8 locale
 RUN locale-gen en_US.UTF-8 && \
     echo 'LANG="en_US.UTF-8"' > /etc/default/locale
@@ -45,9 +47,6 @@ RUN ln -s /scripts/start.sh /etc/service/postgresql/run
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Expose our data, log, and configuration directories.
-VOLUME ["/data"]
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
