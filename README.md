@@ -1,6 +1,6 @@
 # docker-LNPP
 
-**THIS IS IN DEVELOPMENT** and probably not ready yet.
+<s>**THIS IS IN DEVELOPMENT**</s> This just worked the first time for me, so it's ready for the Docker universe I guess!
 
 Development happens on branch `develop`.
 The `master` will hold stable releases once I'd say I have something like that.
