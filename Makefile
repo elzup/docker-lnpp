@@ -10,12 +10,12 @@ PORT:=127.0.0.1:5432
 
 RUNNING:=$(shell docker ps | grep $(NAME) | cut -f 1 -d ' ')
 ALL:=$(shell docker ps -a | grep $(NAME) | cut -f 1 -d ' ')
-DOCKER_RUN_COMMON=--name="$(NAME)" -p $(PORT):5432 -v $(DATA_DIR):/data -e USER="$(USER)" -e PASS="$(PASS)" $(DOCKER_USER)/postgresql
+DOCKER_RUN_COMMON=--name="$(NAME)" -p $(PORT):5432 -v $(DATA_DIR):/data -e USER="$(USER)" -e PASS="$(PASS)" $(DOCKER_USER)/$(NAME)
 
 all: build
 
 build:
-	docker build -t="$(DOCKER_USER)/postgresql" .
+	docker build -t="$(DOCKER_USER)/$(NAME)" .
 
 run: clean
 	mkdir -p $(DATA_DIR)
