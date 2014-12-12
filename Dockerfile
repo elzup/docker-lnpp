@@ -1,15 +1,21 @@
 # LNPP: Linux, NGINX, PostgreSQL, PHP.
+# Note: This expects a volume at /data for postgres, nginx docroot and logs
 
-FROM phusion/baseimage:0.9.13
+FROM phusion/baseimage:0.9.15
 MAINTAINER Florian Sesser <florian@sesser.at>
 
 
 ## Generic, system-wide things
 
+ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
+
+RUN /usr/bin/workaround-docker-2267
 
 # Disable SSH (Not using it at the moment).
 RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
+# or:
+# RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # Ensure we create the cluster with UTF-8 locale
 RUN locale-gen en_US.UTF-8 && \
@@ -20,8 +26,6 @@ RUN apt-get update
 
 
 ## Postgres
-
-VOLUME ["/data/postgresql"]
 
 # Install the latest postgresql
 RUN apt-get -y install postgresql-9.3 \
@@ -43,8 +47,8 @@ RUN touch /firstrun
 RUN mkdir /etc/service/postgresql
 RUN ln -s /scripts/start.sh /etc/service/postgresql/run
 
+RUN mkdir -p /data/postgresql
 RUN chown -R postgres:postgres /data/postgresql
-
 
 
 # Install nginx
