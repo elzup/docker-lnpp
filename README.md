@@ -58,30 +58,9 @@ $ docker run -d --name="postgresql" \
              hacklschorsch/lnpp
 ```
 
-You can also specify a custom port to bind to on the host, a custom data
-directory, and the superuser username and password on the host like so:
-
-``` shell
-$ sudo mkdir -p /srv/docker/postgresql
-$ make run PORT=127.0.0.1:5432 \
-           DATA_DIR=/srv/docker/postgresql \
-           USER=super \
-           PASS=$(pwgen -s -1 16)
-```
-
 ## Connecting to the Database
 
-To connect to the PostgreSQL server, you will need to make sure you have
-a client.  You can install the `postgresql-client` on your host machine by
-running the following (Ubuntu 12.04LTS):
-
-``` shell
-$ sudo apt-get install postgresql-client
-```
-
-As part of the startup for PostgreSQL, the container will generate a random
-password for the superuser.  To view the login in run `docker logs
-<container_name>` like so:
+You'll need the password from the `docker logs` command when prompted:
 
 ``` shell
 $ docker logs postgresql
@@ -91,19 +70,7 @@ POSTGRES_DATA_DIR=/data
 Starting PostgreSQL...
 Creating the superuser: super
 2014-02-07 03:30:55 UTC LOG:  database system was interrupted; last known up at 2014-02-01 07:06:21 UTC
-2014-02-07 03:30:55 UTC LOG:  database system was not properly shut down; automatic recovery in progress
-2014-02-07 03:30:55 UTC LOG:  record with zero length at 0/17859E8
-2014-02-07 03:30:55 UTC LOG:  redo is not required
-2014-02-07 03:30:55 UTC LOG:  database system is ready to accept connections
-2014-02-07 03:30:55 UTC LOG:  autovacuum launcher started
+[...]
 ```
 
-Then you can connect to the PostgreSQL server from the host with the following
-command:
-
-``` shell
-$ psql -h 127.0.0.1 -U super template1
-```
-
-Then enter the password from the `docker logs` command when prompted.
-
+[Enjoy yourselves!](http://youtu.be/nFxjnUPRwx4) ~ Florian
