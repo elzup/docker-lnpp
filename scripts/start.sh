@@ -23,7 +23,7 @@ wait_for_postgres_and_run_post_start_action() {
 
 pre_start_action
 
-wait_for_postgres_and_run_post_start_action &
+wait_for_postgres_and_run_post_start_action
 
 # Start PostgreSQL
 echo "Starting PostgreSQL..."

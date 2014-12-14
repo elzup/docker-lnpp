@@ -9,6 +9,13 @@ pre_start_action() {
   echo "POSTGRES_DATA_DIR=$DATA_DIR/postgresql"
   if [ ! -z $DB ];then echo "POSTGRES_DB=$DB";fi
 
+  # Create postgresql data-dir (if bind-mount)
+  install -d $POSTGRES_DATA_DIR
+  # Ensure postgres owns the DATA_DIR
+  chown -R postgres $POSTGRES_DATA_DIR
+  # Ensure we have the right permissions set on the DATA_DIR
+  chmod -R 700 $POSTGRES_DATA_DIR
+
   # test if DATA_DIR has content
   if [[ ! "$(ls -A $POSTGRES_DATA_DIR)" ]]; then
       echo "Initializing PostgreSQL at $POSTGRES_DATA_DIR"
@@ -16,11 +23,6 @@ pre_start_action() {
       # Copy the data that we generated within the container to the empty DATA_DIR.
       cp -R /var/lib/postgresql/9.3/main/* $POSTGRES_DATA_DIR
   fi
-
-  # Ensure postgres owns the DATA_DIR
-  chown -R postgres $POSTGRES_DATA_DIR
-  # Ensure we have the right permissions set on the DATA_DIR
-  chmod -R 700 $POSTGRES_DATA_DIR
 }
 
 post_start_action() {

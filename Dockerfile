@@ -41,16 +41,17 @@ RUN touch /firstrun
 RUN mkdir /etc/service/postgresql
 RUN ln -s /scripts/start.sh /etc/service/postgresql/run
 
+# will not work for bind-mount volumes, thus
+# this is replicated in the first-run script
 RUN mkdir -p /data/postgresql
 RUN chown -R postgres:postgres /data/postgresql
-
 
 
 ## NGINX
 
 RUN apt-get install -y nginx
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-# RUN mkdir -p /data/nginx_docroot
+RUN mkdir -p /data/nginx_docroot
 ADD config/nginx.conf /etc/nginx/sites-available/default
 
 
@@ -73,7 +74,7 @@ RUN echo "date.timezone = Europe/Berlin;" >> etc/php5/fpm/php.ini
 
 ADD service /etc/service
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-VOLUME ["/var/log/"]
+VOLUME ["/data/", "/var/log/"]
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
