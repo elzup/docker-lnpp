@@ -28,7 +28,7 @@ RUN apt-get update
 
 ## Postgres
 
-RUN apt-get -y install postgresql-9.3 postgresql-contrib-9.3 pwgen inotify-tools
+RUN apt-get -y install postgresql-9.3 postgresql-contrib-9.3 pwgen
 
 # Cofigure the database to use our data dir.
 RUN sed -i -e"s/data_directory =.*$/data_directory = '\/data\/postgresql'/" /etc/postgresql/9.3/main/postgresql.conf
