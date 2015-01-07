@@ -26,6 +26,13 @@ RUN apt-get update
 
 
 
+# Postfix
+
+RUN apt-get -y install postfix sasl2-bin libsasl2-modules
+ADD config/postfix/* /etc/postfix/
+
+
+
 ## Postgres
 
 RUN apt-get -y install postgresql-9.3 postgresql-contrib-9.3 pwgen
